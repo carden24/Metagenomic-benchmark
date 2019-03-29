@@ -11,29 +11,35 @@ fileout = open(fileout_fp, 'w')
 
 
 for line in filein:
+
     # Skip it read is unclassified
+    line = line.rstrip('\n')
+    line = line.rstrip(' ')
+
     if line.startswith('U'):
         continue
+
     else:
-        line0 = line.rstrip('\n')
-        line0 = line0.split('\t')
+        line0 = line.split('\t')
 
         # Store ID assigned to read
-        ReadID = line0[0]
+        ReadID = line0[2]
         Kdata = line0[4]
         Kdata = Kdata.split(' ')
 
         # Go through data
         total_count = 0
         agrees = 0
-        disagrees = 0
+
         for item in Kdata:
-            item = item.split(':')
-            KmerID = item[0]
-            KmerCount = item[1]
+            item2 = item.split(':')
+            KmerID = item2[0]
+            KmerCount = item2[1]
+
             # Skip when the "|:|" marker is found
             if KmerID == "|":
                 continue
+
             else:
                 total_count = total_count + int(KmerCount)
                 if KmerID == ReadID:

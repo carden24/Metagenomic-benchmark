@@ -30,13 +30,16 @@ for line in filein:
         for item in Kdata:
             item = item.split(':')
             KmerID = item[0]
-            KmerCount = int(item[1])
-            if KmerID == ReadID:
-                total_count = total_count + KmerCount
-                agrees = agrees + KmerCount
-#            else:
-#                total_count = total_count + KmerCount
-#                disagrees = agrees + KmerCount
+            KmerCount = item[1]
+            # Skip when the "|:|" marker is found
+            if KmerID == "|":
+                continue
+            else:
+                total_count = total_count + int(KmerCount)
+                if KmerID == ReadID:
+                    agrees = agrees + int(KmerCount)
+                else:
+                    continue
 
         # Create percentage for the line
         positives = (agrees * 100) / float(total_count)

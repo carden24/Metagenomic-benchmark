@@ -65,7 +65,7 @@ for (i in 1:dim(kraken_table)[1]) {
     
     if (kam == "|") {
       # This deals with the "|:|" that separated the data from the two reads
-      continue
+      next
       } else {
         if (kam == kamero){
           

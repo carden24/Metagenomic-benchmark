@@ -19,19 +19,32 @@
 #  MA 02110-1301, USA.
 #
 
+# Added option to take file from command line
+
+
 from ete3 import NCBITaxa
 ncbi = NCBITaxa()
 import sys
 import pandas as pd
 
-file=pd.read_table('reads_ranking.txt', header=None)
-f=open("taxid_ranking_linage.txt", "w")
+filein_fp = sys.argv[1]
+parts = filein_fp.rsplit('.', 1)
+fileout_fp = parts[0] + '_taxid_ranking_lineage.txt'
 
-for x in file.index:
-  taxid=file[1][x]
-  linaje=ncbi.get_lineage(taxid)
-  rank=ncbi.get_rank(linaje)
-  rank2=[rank[taxid] for taxid in linaje]
-  print >> f, file[0][x],'\t',file[1][x],'\t',linaje,'\t',rank2,'\t', file[2][x]
+#file=pd.read_table('reads_ranking.txt', header=None)
+myfile = pd.read_table(filein_fp, header=None)
+
+
+#f = open("taxid_ranking_linage.txt", "w")
+f = open(fileout_fp, 'w')
+
+for x in myfile.index:
+    taxid = myfile[1][x]
+    linaje = ncbi.get_lineage(taxid)
+    rank = ncbi.get_rank(linaje)
+    rank2 = [rank[taxid] for taxid in linaje]
+    f.write('%s\t%s\t%s\t%s\t%s\n' %
+    (myfile[0][x], myfile[1][x], linaje, rank2, myfile[2][x])
+    )
 
 f.close()
